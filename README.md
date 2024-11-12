@@ -1,4 +1,4 @@
-# github-action-example
+# cicd-github-action-example
 
 Corresponding Tutorial: [Automating Database Schema Change workflow Using GitHub Actions](https://www.bytebase.com/docs/tutorials/github-ci/).
 
