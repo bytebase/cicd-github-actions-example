@@ -14,6 +14,7 @@ jobs:
       BYTEBASE_URL: "https://bytebase-ci.zeabur.app"
       BYTEBASE_SERVICE_ACCOUNT: "ci@service.bytebase.com"
       DATABASE: "instances/prod-instance/databases/example"
+      PROJECT: "projects/prj-ex"
     name: SQL Review
     steps:
       - name: Checkout
@@ -35,3 +36,4 @@ jobs:
           token: ${{ steps.login.outputs.token }}
           headers: '{"Accept-Encoding": "deflate, gzip"}'
           database: ${{ env.DATABASE }}
+          project: ${{ env.PROJECT }}
