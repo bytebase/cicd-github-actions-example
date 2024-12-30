@@ -11,10 +11,10 @@ jobs:
   bytebase-sql-review:
     runs-on: ubuntu-latest
     env:
-      BYTEBASE_URL: "https://bytebase-ci.zeabur.app"
-      BYTEBASE_SERVICE_ACCOUNT: "ci@service.bytebase.com"
-      DATABASE: "instances/prod-instance/databases/example"
-      PROJECT: "projects/prj-ex"
+      BYTEBASE_URL: "https://6da2-38-150-12-163.ngrok-free.app"
+      BYTEBASE_SERVICE_ACCOUNT: "xz@bytebase.com"
+      DATABASE: "instances/dbdbdb/databases/db_1"
+      PROJECT: "projects/db333"
     name: SQL Review
     steps:
       - name: Checkout
