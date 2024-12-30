@@ -1,0 +1,1 @@
+CREATE TABLE xzcdsace (id int);
