@@ -110,9 +110,9 @@ async function run(): Promise<void> {
 
     core.debug("Reviews:" + JSON.stringify(responseData.results));
 
-    for (let i = 0; i < sqlFiles.length; i++) {
+    for (let i = 0; i < files.length; i++) {
       const advices = responseData.results[i].advices;
-      const file = sqlFiles[i];
+      const file = files[i].name;
 
       advices.forEach(
         (advice: {

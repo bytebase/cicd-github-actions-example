@@ -128,9 +128,9 @@ function run() {
             }
             const responseData = yield response.json();
             core.debug("Reviews:" + JSON.stringify(responseData.results));
-            for (let i = 0; i < sqlFiles.length; i++) {
+            for (let i = 0; i < files.length; i++) {
                 const advices = responseData.results[i].advices;
-                const file = sqlFiles[i];
+                const file = files[i].name;
                 advices.forEach((advice) => {
                     const annotation = `::${advice.status} file=${file},line=${advice.line},col=${advice.column},title=${advice.title} (${advice.code})::${advice.content}. https://www.bytebase.com/docs/reference/error-code/advisor#${advice.code}`;
                     // Emit annotations for each advice
