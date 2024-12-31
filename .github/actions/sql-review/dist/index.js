@@ -103,6 +103,15 @@ function run() {
                     type: "VERSIONED",
                 });
             }
+            files.sort((a, b) => {
+                if (a.version < b.version) {
+                    return -1;
+                }
+                else if (a.version > b.version) {
+                    return 1;
+                }
+                return 0;
+            });
             const response = yield fetch(`${url}/v1/${project}/releases:check`, {
                 method: "POST",
                 headers,
