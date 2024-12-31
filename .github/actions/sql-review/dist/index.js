@@ -84,11 +84,18 @@ function run() {
             const sqlFiles = matchedFiles.filter((file) => allChangedFiles.includes(file));
             let hasErrorOrWarning = false;
             let files = [];
+            const versionReg = /^\d+/;
             for (const file of sqlFiles) {
+                const versionM = file.match(versionReg);
+                if (!versionM) {
+                    core.info(`failed to get version, ignore ${file}`);
+                    continue;
+                }
+                const version = versionM[0];
                 const content = yield fs_1.promises.readFile(file, "utf8");
                 files.push({
                     statement: content,
-                    version: "",
+                    version: version,
                     changeType: "DDL",
                 });
             }
