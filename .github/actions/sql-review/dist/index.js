@@ -47,20 +47,21 @@ function run() {
     var _a;
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const githubToken = core.getInput('github-token', { required: true });
-            const pattern = core.getInput('pattern', { required: true });
+            const githubToken = core.getInput("github-token", { required: true });
+            const pattern = core.getInput("pattern", { required: true });
             const octokit = github.getOctokit(githubToken);
             const url = core.getInput("url", { required: true });
             const token = core.getInput("token", { required: true });
             const database = core.getInput("database", { required: true });
-            const extraHeaders = core.getInput('headers');
-            const failOnWarnings = core.getBooleanInput('fail-on-warnings');
+            const project = core.getInput("project", { required: true });
+            const extraHeaders = core.getInput("headers");
+            const failOnWarnings = core.getBooleanInput("fail-on-warnings");
             let headers = extraHeaders ? JSON.parse(extraHeaders) : {};
-            headers = Object.assign({ "Content-Type": "application/json", 'Authorization': `Bearer ${token}` }, headers);
+            headers = Object.assign({ "Content-Type": "application/json", Authorization: `Bearer ${token}` }, headers);
             const { owner, repo } = github.context.repo;
             const prNumber = (_a = github.context.payload.pull_request) === null || _a === void 0 ? void 0 : _a.number;
             if (!prNumber) {
-                throw new Error('Could not get PR number from the context; this action should only be run on pull_request events.');
+                throw new Error("Could not get PR number from the context; this action should only be run on pull_request events.");
             }
             let allChangedFiles = [];
             let page = 0;
@@ -75,37 +76,47 @@ function run() {
                     per_page: 100,
                     page,
                 });
-                allChangedFiles.push(...fileList.data.map(file => file.filename));
+                allChangedFiles.push(...fileList.data.map((file) => file.filename));
             } while (fileList.data.length !== 0);
             // Use glob.sync to synchronously match files against the pattern
             const matchedFiles = glob.sync(pattern, { nodir: true });
             // Filter matchedFiles to include only those that are also in allChangedFiles
-            const sqlFiles = matchedFiles.filter(file => allChangedFiles.includes(file));
+            const sqlFiles = matchedFiles.filter((file) => allChangedFiles.includes(file));
             let hasErrorOrWarning = false;
+            let files = [];
             for (const file of sqlFiles) {
-                const content = yield fs_1.promises.readFile(file, 'utf8');
-                core.debug(`\nContent of ${file}:`);
-                core.debug(content);
-                const requestBody = {
+                const content = yield fs_1.promises.readFile(file, "utf8");
+                files.push({
                     statement: content,
-                    name: database,
-                };
-                const response = yield fetch(`${url}/v1/sql/check`, {
-                    method: 'POST',
-                    headers,
-                    body: JSON.stringify(requestBody),
+                    version: "",
+                    changeType: "DDL",
                 });
-                const httpStatus = response.status;
-                if (httpStatus !== 200) {
-                    throw new Error(`Failed to check SQL file ${file} with response code ${httpStatus}`);
-                }
-                const responseData = yield response.json();
-                core.debug("Reviews:" + JSON.stringify(responseData.advices));
-                responseData.advices.forEach((advice) => {
+            }
+            const response = yield fetch(`${url}/v1/${project}/releases:check`, {
+                method: "POST",
+                headers,
+                body: JSON.stringify({
+                    release: {
+                        files: files,
+                    },
+                    targets: [database],
+                }),
+            });
+            const httpStatus = response.status;
+            if (httpStatus !== 200) {
+                throw new Error(`Failed to check release with response code ${httpStatus}`);
+            }
+            const responseData = yield response.json();
+            core.debug("Reviews:" + JSON.stringify(responseData.results));
+            for (let i = 0; i < sqlFiles.length; i++) {
+                const advices = responseData.results[i].advices;
+                const file = sqlFiles[i];
+                advices.forEach((advice) => {
                     const annotation = `::${advice.status} file=${file},line=${advice.line},col=${advice.column},title=${advice.title} (${advice.code})::${advice.content}. https://www.bytebase.com/docs/reference/error-code/advisor#${advice.code}`;
                     // Emit annotations for each advice
                     core.info(annotation);
-                    if (advice.status === 'ERROR' || (failOnWarnings && advice.status === 'WARNING')) {
+                    if (advice.status === "ERROR" ||
+                        (failOnWarnings && advice.status === "WARNING")) {
                         hasErrorOrWarning = true;
                     }
                 });
