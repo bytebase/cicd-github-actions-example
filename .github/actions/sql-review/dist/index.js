@@ -41,6 +41,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(9093));
 const github = __importStar(__nccwpck_require__(5942));
+const path = __importStar(__nccwpck_require__(1017));
 const fs_1 = __nccwpck_require__(7147);
 const glob = __importStar(__nccwpck_require__(5177));
 function run() {
@@ -86,7 +87,8 @@ function run() {
             let files = [];
             const versionReg = /^\d+/;
             for (const file of sqlFiles) {
-                const versionM = file.match(versionReg);
+                const filename = path.basename(file);
+                const versionM = filename.match(versionReg);
                 if (!versionM) {
                     core.info(`failed to get version, ignore ${file}`);
                     continue;
@@ -94,6 +96,7 @@ function run() {
                 const version = versionM[0];
                 const content = yield fs_1.promises.readFile(file, "utf8");
                 files.push({
+                    name: file,
                     statement: content,
                     version: version,
                     changeType: "DDL",

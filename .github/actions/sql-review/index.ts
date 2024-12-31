@@ -1,5 +1,6 @@
 import * as core from "@actions/core";
 import * as github from "@actions/github";
+import * as path from 'path';
 import { promises as fs } from "fs";
 import * as glob from "glob";
 
@@ -61,7 +62,8 @@ async function run(): Promise<void> {
     let files = [];
     const versionReg = /^\d+/
     for (const file of sqlFiles) {
-      const versionM = file.match(versionReg)
+      const filename = path.basename(file)
+      const versionM = filename.match(versionReg)
       if (!versionM) {
         core.info(`failed to get version, ignore ${file}`)
         continue
@@ -69,6 +71,7 @@ async function run(): Promise<void> {
       const version = versionM[0]
       const content = await fs.readFile(file, "utf8");
       files.push({
+        name: file,
         statement: content,
         version: version,
         changeType: "DDL",
