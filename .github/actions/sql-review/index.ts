@@ -1,5 +1,6 @@
 import * as core from "@actions/core";
 import * as github from "@actions/github";
+import * as path from 'path';
 import { promises as fs } from "fs";
 import * as glob from "glob";
 
@@ -59,14 +60,32 @@ async function run(): Promise<void> {
     let hasErrorOrWarning = false;
 
     let files = [];
+    const versionReg = /^\d+/
     for (const file of sqlFiles) {
+      const filename = path.basename(file)
+      const versionM = filename.match(versionReg)
+      if (!versionM) {
+        core.info(`failed to get version, ignore ${file}`)
+        continue
+      }
+      const version = versionM[0]
       const content = await fs.readFile(file, "utf8");
       files.push({
+        name: file,
         statement: content,
-        version: "",
+        version: version,
         changeType: "DDL",
+        type: "VERSIONED",
       });
     }
+    files.sort((a, b) => {
+      if (a.version < b.version) {
+        return -1
+      } else if (a.version > b.version) {
+        return 1
+      }
+      return 0
+    })
 
     const response = await fetch(`${url}/v1/${project}/releases:check`, {
       method: "POST",
@@ -91,9 +110,9 @@ async function run(): Promise<void> {
 
     core.debug("Reviews:" + JSON.stringify(responseData.results));
 
-    for (let i = 0; i < sqlFiles.length; i++) {
+    for (let i = 0; i < files.length; i++) {
       const advices = responseData.results[i].advices;
-      const file = sqlFiles[i];
+      const file = files[i].name;
 
       advices.forEach(
         (advice: {

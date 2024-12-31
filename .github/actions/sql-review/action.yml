@@ -17,6 +17,9 @@ inputs:
     required: true
   headers:
     description: 'JSON string of extra headers to include in the request. e.g Cloudflare Zero Trust headers {"CF-Access-Client-Id": "xxx", CF-Access-Client-Secret: "xxx"}'
+  project:
+    description: "The name of the project. Example: projects/example"
+    required: true
   database:
     description: "The name of database. Example: instances/prod-instance/databases/example"
     required: true
