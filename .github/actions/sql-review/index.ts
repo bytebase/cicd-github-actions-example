@@ -75,6 +75,7 @@ async function run(): Promise<void> {
         statement: content,
         version: version,
         changeType: "DDL",
+        type: "VERSIONED",
       });
     }
 

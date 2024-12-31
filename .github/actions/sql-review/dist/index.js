@@ -100,6 +100,7 @@ function run() {
                     statement: content,
                     version: version,
                     changeType: "DDL",
+                    type: "VERSIONED",
                 });
             }
             const response = yield fetch(`${url}/v1/${project}/releases:check`, {
