@@ -71,7 +71,7 @@ async function run(): Promise<void> {
       const version = versionM[0]
       const content = await fs.readFile(file, "utf8");
       files.push({
-        name: file,
+        path: file,
         statement: content,
         version: version,
         changeType: "DDL",
@@ -110,9 +110,9 @@ async function run(): Promise<void> {
 
     core.debug("Reviews:" + JSON.stringify(responseData.results));
 
-    for (let i = 0; i < files.length; i++) {
-      const advices = responseData.results[i].advices;
-      const file = files[i].name;
+    for (const result of responseData.results) {
+      const advices = result.advices;
+      const file = result.file;
 
       advices.forEach(
         (advice: {
