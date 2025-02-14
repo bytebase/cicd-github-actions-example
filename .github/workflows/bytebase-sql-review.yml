@@ -13,6 +13,7 @@ jobs:
     permissions:
       issues: write
     env:
+      ACTIONS_STEP_DEBUG: true # Enable debug logs
       BYTEBASE_URL: "https://demo.bytebase.com"
       BYTEBASE_SERVICE_ACCOUNT: "ci@service.bytebase.com"
       PROJECT: "projects/project-sample"
