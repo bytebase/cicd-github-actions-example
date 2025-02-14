@@ -5,11 +5,15 @@ on:
     branches:
       - main
     paths:
-      - "**/*.up.sql"
+      - "**/*.sql"
 
 jobs:
   bytebase-sql-review:
     runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
+      contents: write
     env:
       BYTEBASE_URL: "https://demo.bytebase.com"
       BYTEBASE_SERVICE_ACCOUNT: "ci@service.bytebase.com"
@@ -29,10 +33,13 @@ jobs:
       - name: Review
         id: review
         uses: bytebase/create-release-action@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ACTIONS_STEP_DEBUG: true # Enable debug logs
         with:
           url: ${{ env.BYTEBASE_URL }}
           token: ${{ steps.login.outputs.token }}
-          file-pattern: "**/*.up.sql"
+          file-pattern: "migrations/*.sql"
           # fail the action if release checks report any error.
           check-release: "FAIL_ON_ERROR"
           project: ${{ env.PROJECT }}
