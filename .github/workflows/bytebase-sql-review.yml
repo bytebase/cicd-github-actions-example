@@ -32,7 +32,7 @@ jobs:
         with:
           url: ${{ env.BYTEBASE_URL }}
           token: ${{ steps.login.outputs.token }}
-          file-pattern: "**/*.up.sql"
+          file-pattern: "migrations/*.sql"
           # fail the action if release checks report any error.
           check-release: "FAIL_ON_ERROR"
           project: ${{ env.PROJECT }}
