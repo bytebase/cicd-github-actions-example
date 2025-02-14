@@ -1,1 +1,1 @@
-DROP TABLE salary;
+CREATE TABLE salalaala (id INT PRIMARY KEY, name TEXT, salary INT);
