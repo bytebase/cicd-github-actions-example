@@ -1,1 +1,1 @@
-DROP TABLE salalala;
+DROP TABLE salary;
