@@ -11,9 +11,9 @@ jobs:
   bytebase-check-migration-status:
     runs-on: ubuntu-latest
     env:
-      BYTEBASE_URL: "https://bytebase-ci.zeabur.app"
+      BYTEBASE_URL: "https://demo.bytebase.com"
       BYTEBASE_SERVICE_ACCOUNT: "ci@service.bytebase.com"
-      PROJECT: "example"
+      PROJECT: "project-sample"
       ISSUE_TITLE: "[${{ github.repository }}#${{ github.event.pull_request.number }}] ${{ github.event.pull_request.title }}"
     name: Check Migration Status
     steps:
@@ -25,7 +25,7 @@ jobs:
         with:
           bytebase-url: ${{ env.BYTEBASE_URL }}
           service-key: ${{ env.BYTEBASE_SERVICE_ACCOUNT }}
-          service-secret: ${{ secrets.BYTEBASE_PASSWORD }}
+          service-secret: "bbs_iqysPHMqhNpG4rQ5SFEJ" # Please use secrets for sensitive data in production.
       - name: Check Issue Status
         id: check
         uses: ./.github/actions/check-issue-status

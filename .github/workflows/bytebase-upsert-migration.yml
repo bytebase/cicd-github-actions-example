@@ -15,10 +15,10 @@ jobs:
     # Runs only if PR is approved and target branch is main
     if: github.event.review.state == 'approved' && github.event.pull_request.base.ref == 'main'
     env:
-      BYTEBASE_URL: "https://bytebase-ci.zeabur.app"
+      BYTEBASE_URL: "https://demo.bytebase.com"
       BYTEBASE_SERVICE_ACCOUNT: "ci@service.bytebase.com"
-      PROJECT: "example"
-      DATABASE: "instances/prod-instance/databases/example"
+      PROJECT: "project-sample"
+      DATABASE: "instances/test-sample-instance/databases/hr_test"
       ISSUE_TITLE: "[${{ github.repository }}#${{ github.event.pull_request.number }}] ${{ github.event.pull_request.title }}"
       DESCRIPTION: "Triggered by ${{ github.event.repository.html_url }}/pull/${{ github.event.pull_request.number }} ${{ github.event.pull_request.title }}"
     name: Upsert Migration
@@ -31,7 +31,7 @@ jobs:
         with:
           bytebase-url: ${{ env.BYTEBASE_URL }}
           service-key: ${{ env.BYTEBASE_SERVICE_ACCOUNT }}
-          service-secret: ${{ secrets.BYTEBASE_PASSWORD }}
+          service-secret: "bbs_iqysPHMqhNpG4rQ5SFEJ" # Please use secrets for sensitive data in production.
       - name: Upsert issue
         id: upsert
         uses: ./.github/actions/upsert-issue

@@ -11,10 +11,10 @@ jobs:
   bytebase-sql-review:
     runs-on: ubuntu-latest
     env:
-      BYTEBASE_URL: "https://bytebase-ci.zeabur.app"
+      BYTEBASE_URL: "https://demo.bytebase.com"
       BYTEBASE_SERVICE_ACCOUNT: "ci@service.bytebase.com"
-      DATABASE: "instances/prod-instance/databases/example"
-      PROJECT: "projects/prj-ex"
+      PROJECT: "projects/project-sample"
+      DATABASE: "instances/test-sample-instance/databases/hr_test"
     name: SQL Review
     steps:
       - name: Checkout
@@ -25,7 +25,7 @@ jobs:
         with:
           bytebase-url: ${{ env.BYTEBASE_URL }}
           service-key: ${{ env.BYTEBASE_SERVICE_ACCOUNT }}
-          service-secret: ${{ secrets.BYTEBASE_PASSWORD }}
+          service-secret: "bbs_iqysPHMqhNpG4rQ5SFEJ" # Please use secrets for sensitive data in production.
       - name: Review
         id: review
         uses: bytebase/create-release-action@v1
