@@ -1,1 +1,1 @@
-DROP TABLE "salary";
+CREATE TABLE salary (id TEXT);
