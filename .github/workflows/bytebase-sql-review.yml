@@ -10,6 +10,8 @@ on:
 jobs:
   bytebase-sql-review:
     runs-on: ubuntu-latest
+    permissions:
+      issues: write
     env:
       BYTEBASE_URL: "https://demo.bytebase.com"
       BYTEBASE_SERVICE_ACCOUNT: "ci@service.bytebase.com"
