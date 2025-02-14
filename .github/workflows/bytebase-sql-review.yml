@@ -30,7 +30,7 @@ jobs:
           service-secret: "bbs_iqysPHMqhNpG4rQ5SFEJ" # Please use secrets for sensitive data in production.
       - name: Review
         id: review
-        uses: bytebase/create-release-action@v1.0.3
+        uses: bytebase/create-release-action@v1
         with:
           url: ${{ env.BYTEBASE_URL }}
           token: ${{ steps.login.outputs.token }}
@@ -40,4 +40,3 @@ jobs:
           project: ${{ env.PROJECT }}
           targets: ${{ env.DATABASE }}
           validate-only: true
-          debug: true
