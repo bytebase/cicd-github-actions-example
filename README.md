@@ -1,5 +1,9 @@
 # Database CI/CD GitHub Actions Example
 
+Please refer to [the new example](https://github.com/bytebase/bytebase-release-cicd-workflows-example).
+
+---
+
 Corresponding Tutorial: [Automating Database Schema Change workflow Using GitHub Actions](https://www.bytebase.com/docs/tutorials/github-ci/).
 
 Sample github custom actions to call Bytebase API to coordinate the schema migration in Bytebase with the GitHub PR workflow. A typical workflow works like this:
