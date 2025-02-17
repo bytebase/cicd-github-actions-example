@@ -18,7 +18,7 @@ jobs:
       BYTEBASE_URL: "https://demo.bytebase.com"
       BYTEBASE_SERVICE_ACCOUNT: "ci@service.bytebase.com"
       PROJECT: "projects/project-sample"
-      DATABASE: "instances/test-sample-instance/databases/hr_test"
+      DATABASE: "instances/test-sample-instance/databases/hr_test22"
     name: SQL Review
     steps:
       - name: Checkout
